@@ -1,0 +1,31 @@
+A General Linear Recursion Operator vs Data.List
+
+Abstract: Some time ago, I got interested in generalizing
+Haskell's Data.List.mapAccumL, in order to get a fold right
+for some now-forgotten purpose. Jamey Sharp and Julian
+Kongslie helped me construct a function I called fold, which
+is a generalization of both foldl and foldr which gives
+access to both a left and right accumulator at each step of
+the fold. I have always been interested in pure-combinator
+programming: I believe that from a SE perspective getting
+rid of looping and recursion offers the best chance of being
+able to write programs whose control flow is correct. I
+decided to see how much of Data.List I could rewrite using
+just fold and its specializations foldl and foldr. It turns
+out that most of Data.List can be rewritten this way: adding
+unfoldr captures most of the rest.
+
+Just recently, I managed to rewrite fold and unfoldr in
+terms of a more general combinator, lr, that seems to
+capture general linear recursion. The lr combinator is a
+compromise between the somewhat dubious abstraction of fix
+and the not-quite-general-enough fold and unfoldr; I have
+used it to implement the rest of Data.List as pure
+combinators, without recursion or looping. In the process, I
+have added about 30 new functions to Data.List, improved the
+documentation of Data.List quite a bit, and in particular
+added "laws" for most functions that semi-formally capture
+their behavior. This work-in-progress talk is an opportunity
+for me to show you what I have, but more importantly to get
+feedback and opinions as to whether the whole structure is
+of any use.
