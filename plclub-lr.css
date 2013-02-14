@@ -1,1 +1,16 @@
-p,h1,h2,h3,h4 { font-family: "arial", "sans-serif"; }
+/* general */
+HTML {height:100%;}
+BODY {background:#F8F8F8; font-family:verdana,helvetica,arial,sans-serif; height:100%; margin:1em 1em;}
+H1,H2,H3,H4,H5,H6 {font-family:garamond,georgia,serif; margin:.5em 0;}
+H1,H2 {color:#4A6F08; font-weight:normal;}
+H1 {font-size:1.8em;}
+
+H2 {font-size:1.5em;}
+H3 {font-size:1.1em; font-weight:bold;}
+H4,H5,H6 {font-size:1em; font-weight:normal; font-style:italic;}
+P {line-height:1.2em;}
+
+/* table */
+TABLE {border-collapse: collapse; border-style: hidden;}
+TR {border-style: solid; border-width: 2px; border-color: #ddd;}
+TH,TD {padding-left: 8px; padding-right: 8px;  padding-top: 2px; padding-bottom: 2px;}
