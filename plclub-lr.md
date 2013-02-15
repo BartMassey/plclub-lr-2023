@@ -145,6 +145,16 @@ list argument of `fold` is unnecessary.
 
 ## The Structure of `Data.List.Combinator`
 
+It is interesting to look at the
+[dependency graph](graph/graph.svg)
+of the resulting `Data.List.Combinator`.
+
+* Of course, this is only one possible way of doing
+  things. My Haskell skills are not so leet...
+
+* Note how much of the library is in terms of just a few
+  primitive functions.
+
 ## Acknowledgments
 
 * Jamey Sharp and Julian Kongslie, who helped me work
