@@ -155,6 +155,22 @@ of the resulting `Data.List.Combinator`.
 * Note how much of the library is in terms of just a few
   primitive functions.
 
+## One Strictness Bug
+
+## Performance Sucks
+
+## Work In Progress
+
+* Find or write `Data.List` QuickCheck or similar tests.
+
+* Use a strictness tester to find more strictness bugs.
+
+* Nail down the rest of the Laws.
+
+* Experiment with actual proofs in this structure.
+
+* Make performance acceptable if possible.
+
 ## Acknowledgments
 
 * Jamey Sharp and Julian Kongslie, who helped me work
