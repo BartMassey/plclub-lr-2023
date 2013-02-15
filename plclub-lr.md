@@ -93,14 +93,17 @@ recursion (`cycle`).
   `Data.List` functions.
 
 * Added about 25 functions for completeness, orthogonality,
-  general goodness.
+  general goodness: total about 135 functions.
 
 ## Laws
 
 To try to ensure that I was doing the rewrite fairly, I
 constructed "laws" for almost all functions in `Data.List`.
 
-* Laws were constructed solely from the documentation.
+* Also specified complexity and strictness.
+
+* Laws (and code) were constructed solely from the
+  documentation.
 
 * Did some very minimal verification that some laws held for
   both versions.
@@ -155,11 +158,54 @@ of the resulting `Data.List.Combinator`.
 * Note how much of the library is in terms of just a few
   primitive functions.
 
+## Some Lazy Pattern Matches
+
+In several places, pattern matches had to be made "lazy" (~
+operator) to get strictness right.
+
+* Typical case was an "irrefutable" pattern match: wanted to
+  be deferred for laziness because there was only one way it
+  could match. e.g. in `transpose`
+
+        g ~(y : ys) (h, t) = (y : h, ys : t)
+
+* Maybe this should be implicit?  I had nice discussions
+  with Tim Sheard and Mark Jones about this. They both think
+  that this is fine.
+
+* Mark actually managed to convince me for a while.
+
+         f ~[_] = 3
+
+         >>> f []
+         3
+
+  * Now I am not convinced again: this seems OK to me.
+
 ## One Strictness Bug
+
+There is one known outright strictness bug. There are probably
+many others.
+
+* Bug manifests in `take`.
+
+        >>> take 1 $ insertBy compare 2 [1, undefined]
+        [1*** Exception: Prelude.undefined
+
+* Seems like something deep, and I can't find it.
+
+* Strange behavior in that take "shouldn't be able to do that".
 
 ## Performance Sucks
 
+The performance of all this? The same 30x slower that was
+reported last week. And probably for the same reasons.
+
+* Did some Criterion [benchmarks](benchmarks.html)
+
 ## Work In Progress
+
+* Fix known bugs.
 
 * Find or write `Data.List` QuickCheck or similar tests.
 
@@ -171,12 +217,17 @@ of the resulting `Data.List.Combinator`.
 
 * Make performance acceptable if possible.
 
+* Figure out how to fuse `lr` calls.
+
 ## Acknowledgments
 
 * Jamey Sharp and Julian Kongslie, who helped me work
   through this the first time.
 
-* Mark Jones, who had great comments on everything.
+* Mark Jones and Tim Sheard, who had great comments on
+  everything.
 
 * The PDXFunc folks, who listed to two versions of this talk
   and provided valuable feedback.
+
+* Graphviz and Criterion

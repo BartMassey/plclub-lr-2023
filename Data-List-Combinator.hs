@@ -1184,7 +1184,7 @@ unfoldl' f a0 =
 
 -- XXX Strictness bug:
 -- 
--- >>> take 1 $ insertBy' compare 2 [1, undefined]
+-- >>> take 1 $ insertBy compare 2 [1, undefined]
 -- [1*** Exception: Prelude.undefined
 -- 
 -- After messing with it for an hour, I have no clue why.
@@ -2311,6 +2311,13 @@ sortBy c xs0 =
 insert :: Ord a => a -> [a] -> [a]
 insert = insertBy compare
 
+-- XXX Strictness bug:
+-- 
+-- >>> take 1 $ insertBy compare 2 [1, undefined]
+-- [1*** Exception: Prelude.undefined
+-- 
+-- After messing with it for an hour, I have no clue why.
+
 -- | Given a list of 'Ord' values, insert an element @x1@ at the first
 -- position such that the next element @x2@ is greater than or equal to @x1@,
 -- using the supplied comparison function. Some examples:
@@ -2351,6 +2358,13 @@ insertBy c t xs =
 -- > forall x0 xs . insert' x0 xs == insertBy' compare x0 xs
 insert' :: Ord a => a -> [a] -> [a]
 insert' = insertBy' compare
+
+-- XXX Strictness bug:
+-- 
+-- >>> take 1 $ insertBy' compare 2 [1, undefined]
+-- [1*** Exception: Prelude.undefined
+-- 
+-- After messing with it for an hour, I have no clue why.
 
 -- | Given a list of 'Ord' values, insert an element @x0@
 -- into the list at the last position where it is still less
