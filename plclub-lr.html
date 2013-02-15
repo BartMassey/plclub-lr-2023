@@ -1,0 +1,47 @@
+<html><head>
+<title>lr / Data.List</title>
+<link rel="stylesheet" type="text/css" href="plclub-lr.css">
+</head><body>
+<h1>A General Linear Recursion Operator vs Data.List</h1>
+
+<p>Bart Massey <br />
+PL Club 2013-02-14</p>
+
+<h2>A WIP Story</h2>
+
+<p>This story goes back a ways. In 2010</p>
+
+<ul>
+<li><p>I get interested in <code>Data.List.mapAccumL</code>, because it appears to
+be not obviously expressible as <code>foldl</code> or <code>foldr</code>.</p></li>
+<li><p>The key seems to be that it carries data from the left like
+<code>foldl</code> (the "accumL" part), but should be implemented
+like <code>map</code> with a <code>foldr</code>.</p></li>
+<li><p>Jamey Sharp, Julian Kongslie and I become interested in
+whether there's some kind of "both ways at once" fold that would
+apply here: laziness seems to make it possible.</p></li>
+</ul>
+
+<h2>Introducing <code>foldlr</code></h2>
+
+<p>After some messing around, the thing that the types kind of
+force seems to make sense:</p>
+
+<ul>
+<li><p>While traversing the list from the left, carry along
+a left accumulator. Have it "meet" an accumulator "travelling
+from the right", that will be started when the end of the
+list is reached.</p></li>
+<li><p>Thus, this fold can make use of some information from
+the past, and some "from the future", thanks to laziness.</p></li>
+<li><p>The result looks like <a href="foldlr.hs.html">this</a>.</p></li>
+</ul>
+
+<h2>Some properties of <code>foldlr</code></h2>
+
+<ul>
+<li><p><code>foldl</code> and <code>foldr</code> are trivially
+<a href="foldlr.hs.html">implementable</a> as <code>foldlr</code>.</p></li>
+<li><p><code>mapAccumL</code> is implementable as <code>foldlr</code>.</p></li>
+</ul>
+</body></html>
