@@ -8,6 +8,14 @@ foldlr f l r (x : xs) =
       (l'', r'') = foldlr f l' r xs in
   (l'', r')
 
+foldl :: (a -> x -> a) -> a -> [x] -> a
+foldl f a0 xs =
+  fst $ foldlr (\l x _ -> (f l x, undefined)) a0 undefined xs
+
+foldr :: (x -> a -> a) -> a -> [x] -> a
+foldr f a0 xs =
+  snd $ foldlr (\_ x r -> (undefined, f x r)) undefined a0 xs
+
 mapAccumL :: (a -> x -> (a, y)) -> a -> [x] -> (a, [y])
 mapAccumL f a0 xs =
   foldlr g a0 [] xs

@@ -30,4 +30,11 @@ force seems to make sense:
 * Thus, this fold can make use of some information from
   the past, and some "from the future", thanks to laziness.
 
-* The result looks like [this](foldlr.hs.html)
+* The result looks like [this](foldlr.hs.html).
+
+## Some properties of `foldlr`
+
+* `foldl` and `foldr` are trivially
+  [implementable](foldlr.hs.html) as `foldlr`.
+
+* `mapAccumL` is implementable as `foldlr`.
