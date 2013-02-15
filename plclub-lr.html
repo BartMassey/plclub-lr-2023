@@ -135,7 +135,15 @@ recursing was desirable; a <code>Maybe</code> on the right argument
 did the trick.</p></li>
 <li><p>The result looks more like <code>unfold</code>, and for a while I
 called it that.</p></li>
-<li><p>Provides "natural" (?) implementations of <code>fold</code>,
-<code>unfoldr</code> and <code>unfoldl</code>.</p></li>
+</ul>
+
+<h2>The Power of <code>lr</code></h2>
+
+<ul>
+<li><p>Provides "natural" (?) implementations of <code>fold</code>, and of
+<code>unfoldr</code> and <code>unfoldl</code> (just ignoring left or right as
+with <code>foldl</code> and <code>foldr</code>).</p></li>
+<li><p>Contrast with <code>fix</code>, which does a sort of
+"<a href="foldlr.hs.html">fake nonrecursion</a>".</p></li>
 </ul>
 </body></html>

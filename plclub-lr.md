@@ -132,5 +132,25 @@ list argument of `fold` is unnecessary.
 * The result looks more like `unfold`, and for a while I
   called it that.
 
-* Provides "natural" (?) implementations of `fold`,
-  `unfoldr` and `unfoldl`.
+## The Power of `lr`
+
+* Provides "natural" (?) implementations of `fold`, and of
+  `unfoldr` and `unfoldl` (just ignoring left or right as
+  with `foldl` and `foldr`).
+
+* Contrast with `fix`, which does a sort of
+  "Recursion-removal In Name Only" [RINO](foldlr.hs.html)".
+
+* Contrast with `fold`, which is stuck down to lists.
+
+## The Structure of `Data.List.Combinator`
+
+## Acknowledgments
+
+* Jamey Sharp and Julian Kongslie, who helped me work
+  through this the first time.
+
+* Mark Jones, who had great comments on everything.
+
+* The PDXFunc folks, who listed to two versions of this talk
+  and provided valuable feedback.

@@ -10,5 +10,9 @@ egrep "$STARTEXP" "$1" |
 awk '{print $1;}' |
 while read FN
 do
-	echo "/\\<$FN\\>/ { if (curfn != \"$FN\") printf \"  \\\"%s\\\" -> \\\"%s\\\";\\\\n\", curfn, \"$FN\"; }"
+    case "$FN" in
+        *\') FNN="\\<$FN" ;;
+        *) FNN="\\<$FN\\>([^']|\$)" ;;
+    esac
+    echo "/$FNN/ { if (curfn != \"$FN\") printf \"  \\\"%s\\\" -> \\\"%s\\\";\\\\n\", curfn, \"$FN\"; }"
 done

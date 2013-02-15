@@ -1,6 +1,8 @@
 -- Copyright (c) 2013 Bart Massey
 -- Reconstruction of `foldlr` primitive.
 
+import Data.Function (fix)
+
 foldlr :: (l -> x -> r -> (l, r)) -> l -> r -> [x] -> (l, r)
 foldlr _ l r0 [] = (l, r0)
 foldlr f l r (x : xs) =
@@ -42,3 +44,18 @@ fold f (l, r) (x : xs) =
   let (l', r') = f (l, r'') x
       (l'', r'') = fold f (l', r) xs in
   (l'', r')
+
+
+foldr_ :: (x -> a -> a) -> a -> [x] -> a
+foldr_ f a0 xs = 
+  let (a, _) = (fix foldr_') (a0, xs) in a
+  where
+    foldr_' g (a, []) = (a, undefined)
+    foldr_' g (a, x : xs) = g (f x a, xs)
+
+foldr__ :: (x -> a -> a) -> a -> [x] -> a
+foldr__ f a0 xs =
+  let (a, _) = foldr__' (a0, xs) in a
+  where
+    foldr__' (a, []) = (a, undefined)
+    foldr__' (a, x : xs) = foldr__' (f x a, xs)

@@ -1431,7 +1431,7 @@ break p = span (not . p)
 -- predicate. Laws:
 -- 
 -- > forall ps xs . stripPrefix ps xs == stripPrefixBy (==) ps xs
-stripPrefix  :: Eq a => [a] -> [a] -> Maybe [a]
+stripPrefix :: Eq a => [a] -> [a] -> Maybe [a]
 stripPrefix ps xs = stripPrefixBy (==) ps xs
 
 -- | The 'stripPrefixBy' function drops the given prefix from a list.
@@ -1449,7 +1449,7 @@ stripPrefix ps xs = stripPrefixBy (==) ps xs
 -- >   stripPrefixBy eq (p : ps) (x : xs) == Nothing
 -- > forall eq p ps x xs | not (null ps) && not (null xs) && eq p x . 
 -- >   stripPrefixBy eq (p : ps) (x : xs) == stripPrefixBy eq ps xs
-stripPrefixBy  :: (a -> a -> Bool) -> [a] -> [a] -> Maybe [a]
+stripPrefixBy :: (a -> a -> Bool) -> [a] -> [a] -> Maybe [a]
 stripPrefixBy p ps xs =
   foldl f (Just ps) xs
   where
@@ -1466,7 +1466,7 @@ stripPrefixBy p ps xs =
 -- Laws:
 -- 
 -- > forall ss xs . stripSuffix ss xs == stripSuffixBy (==) ss xs
-stripSuffix  :: Eq a => [a] -> [a] -> Maybe [a]
+stripSuffix :: Eq a => [a] -> [a] -> Maybe [a]
 stripSuffix = stripSuffixBy (==)
 
 -- | The 'stripSuffixBy' function drops the given suffix from a list.
@@ -1485,7 +1485,7 @@ stripSuffix = stripSuffixBy (==)
 -- >   stripSuffixBy eq (ss ++ [s]) (xs ++ [x]) == Nothing
 -- > forall eq s ss x xs | not (null ss) && not (null ss) && eq s x . 
 -- >   stripSuffixBy eq (ss ++ [s]) (xs ++ [x]) == stripSuffixBy eq ps xs
-stripSuffixBy  :: (a -> a -> Bool) -> [a] -> [a] -> Maybe [a]
+stripSuffixBy :: (a -> a -> Bool) -> [a] -> [a] -> Maybe [a]
 stripSuffixBy eq ps xs0 =
   lookupBy (`equals` ps) $ map (\(x, y) -> (y, x)) $ splits xs0
   where
@@ -1792,7 +1792,7 @@ xs !! n =
 -- case of 'elemIndexBy'. Laws:
 -- 
 -- forall x xs . elemIndex x xs == elemIndexBy (==) x xs
-elemIndex       :: Eq a => a -> [a] -> Maybe Int
+elemIndex :: Eq a => a -> [a] -> Maybe Int
 elemIndex x xs = elemIndexBy (==) x xs
 
 -- | The 'elemIndexBy' function returns the index of the
