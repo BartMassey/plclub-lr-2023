@@ -26,3 +26,19 @@ mapAccumL f a0 xs =
 
 sumSum :: [Int] -> (Int, [Int])
 sumSum xs = mapAccumL (\a x -> (a + 1, a + x)) 0 xs
+
+fl :: Int -> Int -> Int -> (Int, Int)
+fl l x r | l > 0 = (l + 1, r + 1)
+
+fr :: Int -> Int -> Int -> (Int, Int)
+fr l x r | r > 0 = (l + 1, r + 1)
+
+flr :: Int -> Int -> Int -> (Int, Int)
+flr l x r | l > 0 && r > 0 = (l + 1, r + 1)
+
+fold :: ((l, r) -> x -> (l, r)) -> (l, r) -> [x] -> (l, r)
+fold _ ~(l, r0) [] = (l, r0)
+fold f (l, r) (x : xs) =
+  let (l', r') = f (l, r'') x
+      (l'', r'') = fold f (l', r) xs in
+  (l'', r')
