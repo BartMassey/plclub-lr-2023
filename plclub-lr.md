@@ -38,3 +38,99 @@ force seems to make sense:
   [implementable](foldlr.hs.html) as `foldlr`.
 
 * `mapAccumL` is implementable as `foldlr`.
+
+* Strictness of `foldlr` depends on strictness of folding
+  function `f`: strict if `f` is strict on at most one of
+  the right or left accumulator, bottom if `f` is strict on
+  both.
+
+## Related Work
+
+* Noah Easterly's
+  "[bifold](http://haskell.1045720.n5.nabble.com/Bifold-a-simultaneous-foldr-and-foldl-td3285581.html)"
+  from Haskell-Cafe is identical up to trivial signature
+  differences
+
+* I do not understand whether Henning Theielemann's
+  "foldl'r" discussed there is the same.
+
+* Probably others also.
+
+## An SE Plan
+
+I've always liked the idea of supercombinator
+programming. In particular, the promise of getting rid of
+non-sequential control flow is that it intuitively seems
+likely to get rid of control flow bugs:
+
+> gotos &#8594; loops &#8594; recursion &#8594; nothing
+
+Parts of `Data.List` are written in terms of each other, but
+a lot are "optimized" loops. Try rewriting everything in
+terms of `foldlr`?
+
+## (Notational Switch)
+
+An aside: the type signature and usage of `foldlr` is kind
+ugly. After some messing around, I ended up with
+[this](foldlr.hs.html) `fold`.
+
+## `Data.List.Combinator` -- The Big Rewrite
+
+Some months later I had a working copy of `Data.List`
+rewritten in terms of `fold`, `unfoldr`, and one data
+recursion (`cycle`).
+
+* The rewrite was a sort of "cheat". In several places
+ (`transpose` and `sort` come to mind) I constructed an
+ internal list whose sole purpose was structural, to run
+ `fold` over. The list contents were ignored or marginally
+ useful.
+
+* Having `unfoldr` lying around separately seemed no good.
+
+* Started to expose one possible set of dependencies between
+  `Data.List` functions.
+
+* Added about 25 functions for completeness, orthogonality,
+  general goodness.
+
+## Laws
+
+To try to ensure that I was doing the rewrite fairly, I
+constructed "laws" for almost all functions in `Data.List`.
+
+* Laws were constructed solely from the documentation.
+
+* Did some very minimal verification that some laws held for
+  both versions.
+
+* Found one fairly glaring bug in the documentation, in
+  [insertBy](Data-List-Combinator.hs.html).
+  ([Bug #7421](http://hackage.haskell.org/trac/ghc/ticket/7421),
+  now fixed).
+
+* Some laws are missing, likely still buggy.
+
+## Phase 2: Now With Even More Supercombinators
+
+Over the recent Christmas break I started getting interested
+in what cleanups were possible. I started thinking about the
+general structure of linear recursion, and decided that the
+list argument of `fold` is unnecessary.
+
+* Constructed a more general
+  [operator](Data-List-Combinator.hs.html) `lr`, for
+  "linear recursion" (stupid name?), which handwavingly
+  generalizes any linear recursive function.
+
+* Constructed by essentially ripping the list out of `fold`,
+  leaving only the structure. This means that a way to stop
+  recursing was desirable; a `Maybe` on the right argument
+  did the trick.
+
+* The result looks more like `unfold`, and for a while I
+  called it that.
+
+* Provides "natural" (?) implementations of `fold`,
+  `unfoldr` and `unfoldl`.

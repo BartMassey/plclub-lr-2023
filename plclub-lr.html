@@ -43,5 +43,99 @@ the past, and some "from the future", thanks to laziness.</p></li>
 <li><p><code>foldl</code> and <code>foldr</code> are trivially
 <a href="foldlr.hs.html">implementable</a> as <code>foldlr</code>.</p></li>
 <li><p><code>mapAccumL</code> is implementable as <code>foldlr</code>.</p></li>
+<li><p>Strictness of <code>foldlr</code> depends on strictness of folding
+function <code>f</code>: strict if <code>f</code> is strict on at most one of
+the right or left accumulator, bottom if <code>f</code> is strict on
+both.</p></li>
+</ul>
+
+<h2>Related Work</h2>
+
+<ul>
+<li><p>Noah Easterly's
+"<a href="http://haskell.1045720.n5.nabble.com/Bifold-a-simultaneous-foldr-and-foldl-td3285581.html">bifold</a>"
+from Haskell-Cafe is identical up to trivial signature
+differences</p></li>
+<li><p>I do not understand whether Henning Theielemann's
+"foldl'r" discussed there is the same.</p></li>
+<li><p>Probably others also.</p></li>
+</ul>
+
+<h2>An SE Plan</h2>
+
+<p>I've always liked the idea of supercombinator
+programming. In particular, the promise of getting rid of
+non-sequential control flow is that it intuitively seems
+likely to get rid of control flow bugs:</p>
+
+<blockquote>
+  <p>gotos &#8594; loops &#8594; recursion &#8594; nothing</p>
+</blockquote>
+
+<p>Parts of <code>Data.List</code> are written in terms of each other, but
+a lot are "optimized" loops. Try rewriting everything in
+terms of <code>foldlr</code>?</p>
+
+<h2>(Notational Switch)</h2>
+
+<p>An aside: the type signature and usage of <code>foldlr</code> is kind
+ugly. After some messing around, I ended up with
+<a href="foldlr.hs.html">this</a> <code>fold</code>.</p>
+
+<h2><code>Data.List.Combinator</code> -- The Big Rewrite</h2>
+
+<p>Some months later I had a working copy of <code>Data.List</code>
+rewritten in terms of <code>fold</code>, <code>unfoldr</code>, and one data
+recursion (<code>cycle</code>).</p>
+
+<ul>
+<li><p>The rewrite was a sort of "cheat". In several places
+(<code>transpose</code> and <code>sort</code> come to mind) I constructed an
+internal list whose sole purpose was structural, to run
+<code>fold</code> over. The list contents were ignored or marginally
+useful.</p></li>
+<li><p>Having <code>unfoldr</code> lying around separately seemed no good.</p></li>
+<li><p>Started to expose one possible set of dependencies between
+<code>Data.List</code> functions.</p></li>
+<li><p>Added about 25 functions for completeness, orthogonality,
+general goodness.</p></li>
+</ul>
+
+<h2>Laws</h2>
+
+<p>To try to ensure that I was doing the rewrite fairly, I
+constructed "laws" for almost all functions in <code>Data.List</code>.</p>
+
+<ul>
+<li><p>Laws were constructed solely from the documentation.</p></li>
+<li><p>Did some very minimal verification that some laws held for
+both versions.</p></li>
+<li><p>Found one fairly glaring bug in the documentation, in
+<a href="Data-List-Combinator.hs.html">insertBy</a>.
+(<a href="http://hackage.haskell.org/trac/ghc/ticket/7421">Bug #7421</a>,
+now fixed).</p></li>
+<li><p>Some laws are missing, likely still buggy.</p></li>
+</ul>
+
+<h2>Phase 2: Now With Even More Supercombinators</h2>
+
+<p>Over the recent Christmas break I started getting interested
+in what cleanups were possible. I started thinking about the
+general structure of linear recursion, and decided that the
+list argument of <code>fold</code> is unnecessary.</p>
+
+<ul>
+<li><p>Constructed a more general
+<a href="Data-List-Combinator.hs.html">operator</a> <code>lr</code>, for
+"linear recursion" (stupid name?), which handwavingly
+generalizes any linear recursive function.</p></li>
+<li><p>Constructed by essentially ripping the list out of <code>fold</code>,
+leaving only the structure. This means that a way to stop
+recursing was desirable; a <code>Maybe</code> on the right argument
+did the trick.</p></li>
+<li><p>The result looks more like <code>unfold</code>, and for a while I
+called it that.</p></li>
+<li><p>Provides "natural" (?) implementations of <code>fold</code>,
+<code>unfoldr</code> and <code>unfoldl</code>.</p></li>
 </ul>
 </body></html>
