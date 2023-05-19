@@ -1,0 +1,190 @@
+<html><head>
+<title>lr / Data.List</title>
+<link rel="stylesheet" type="text/css" href="plclub.css">
+</head><body>
+<h1>Data.List.Combinators: A Post-Mortem</h1>
+
+<p>Bart Massey <br />
+PL Club 2023-05-19</p>
+
+<h2>Talk Outline</h2>
+
+<ul>
+<li><p>Describe the overall project</p></li>
+<li><p>Set some expectations</p></li>
+<li><p>Look at the old talk in parallel with comments here</p></li>
+<li><p>Pose a whole bunch of questions</p></li>
+</ul>
+
+<h2>The Data.List.Combinators Project</h2>
+
+<ul>
+<li><p>In 2012 or so I was fooling around with "fancy" combinators</p></li>
+<li><p>I conceived the idea of expressing all of (pre-FTP)
+<code>Data.List</code> as pure combinator functions atop a single
+recursive function. It sounded like fun, so I did it
+(with a bunch of help from others).</p></li>
+<li><p>The goal was to produce clones with maximal laziness (per
+the original, I think) and identical behavior. One barrier
+was the lack of "formal" (small-F) specification of the
+original. So I wrote "Laws" for most of the functions.</p></li>
+</ul>
+
+<h2>Project Results: Summary</h2>
+
+<ul>
+<li><p>The result was as expected: (very) slow, kind of ugly and
+weird in spots, an unfixed bug</p></li>
+<li><p>Was a proof of possibility; found and fixed a bug in the library
+documentation </p></li>
+<li><p>Exposed some possibilities for new <code>Data.List</code> functions</p></li>
+</ul>
+
+<h2>About This Work</h2>
+
+<ul>
+<li><p><em>Never</em> run down your own skills or work at the start of a
+talk. It sets a horrible expectation for the
+listeners. Terrible form.</p></li>
+<li><p>Having said that…</p>
+
+<ul>
+<li><p>I am not particularly competent at "modern" FP. Please
+correct my many mistakes.</p></li>
+<li><p>This work appears pretty naïve given current
+understanding of fancy morphisms. Help appreciated.</p></li>
+<li><p>There's a lot here that never got properly finished.</p></li>
+</ul></li>
+</ul>
+
+<h2>Cunningham's Law</h2>
+
+<ul>
+<li><p>The best way to get a right answer on the Internet is to
+post a wrong answer</p></li>
+<li><p>My story about this</p></li>
+</ul>
+
+<h2>Reconstructing The Work: Rebuilding</h2>
+
+<ul>
+<li><p>Building <code>Data.List.Combinators</code> on GHC 9 failed with a
+compiler panic trying to build <code>Test.QuickCheck.Random</code>
+for QuickCheck-2.14.2</p>
+
+<pre><code>ghc: panic! (the 'impossible' happened)
+  (GHC version 9.0.2:
+    Ix{Int}.index: Index (2504331244) out of range ((0,821))
+</code></pre>
+
+<p>Fortunately GHC 8 worked. I am shocked at how easy it was
+to clean up some minor <code>.cabal</code> issues and build without
+warnings or errors.</p></li>
+<li><p>Reran the benchmarks. Relative performance was similar to
+2013 (GHC 5)</p></li>
+</ul>
+
+<h2>Reconstructing The Work: Remembering</h2>
+
+<ul>
+<li><p>Found my 2013 talk notes, thank goodness. Not sure what I
+would have done otherwise.</p></li>
+<li><p>Some tools and techniques I used to put the talk together
+took some re-figuring. Glad I used a <code>Makefile</code>.</p></li>
+</ul>
+
+<h2>2013 Talk: foldlr and lr</h2>
+
+<ul>
+<li><p>Thanks to Katie Casamento for encouraging me to check out
+modern morphism stuff. I found this 2014 blog post series
+by Paul Thomson</p>
+
+<p>https://blog.sumtypeofway.com/posts/introduction-to-recursion-schemes.html</p>
+
+<p>that seems great: still digesting</p></li>
+<li><p>I think <code>foldlr</code> is some standard catamorphism and <code>lr</code> is
+some standard hylomorphism? Idk about <code>fold</code></p></li>
+</ul>
+
+<h2>2013 Talk: SE</h2>
+
+<ul>
+<li><p>Most of the functions are built on top of the "big three":
+<code>foldl</code>, <code>foldr</code>, <code>unfoldr</code>. I suspect that's partly
+because of my naïvety about how the fancy functions can be
+used. Is that the whole story?</p></li>
+<li><p>The new functions are interesting, in the sense that maybe
+they are reasonable to add. Should look into it?</p></li>
+<li><p>An aside: libraries <em>very much vs</em> applications — c.f. <code>lrbench</code>.
+How much can / should we expect of library authors? Of
+application authors?</p></li>
+</ul>
+
+<h2>2013 Talk: Laws</h2>
+
+<ul>
+<li><p>How should Laws be specified for Haskell functions? Is
+this the right "syntax"?</p></li>
+<li><p>Strictness is important but I know of no good way to
+specify strictness short of "maximally lazy" and some
+English. Ideas?</p></li>
+<li><p>Time complexity is a bit ill-defined for Haskell? Or no?
+Laziness makes reasoning about it confusing.</p></li>
+<li><p>Space complexity is a problem. Any good way to get insight
+on memory usage for "garbage cons cells" or similar?</p></li>
+</ul>
+
+<h2>2013 Talk: Lazy Pattern Matching</h2>
+
+<ul>
+<li>Is this an actual issue? I don't think folks "normally" teach
+lazy matching to new Haskell users, although I think our
+FP course covers it</li>
+</ul>
+
+<h2>Performance?</h2>
+
+<ul>
+<li><p>Does performance matter here? Are there ways to make the
+whole structure more performant?</p></li>
+<li><p>How much of the performance problem is just my lack of
+understanding of Haskell operational semantics? Can we
+reasonably expect such understanding from "line programmers"?</p></li>
+<li><p>Is the lazy matching part of the performance issue?</p></li>
+<li><p>How much should we expect GHC to be able to do for us
+going forward?</p></li>
+</ul>
+
+<h2>FTP?</h2>
+
+<ul>
+<li><p>Post this work, the "Functional Traversable Proposal" was
+adopted for <code>Data.List</code>, making it more <code>Data.FT</code></p></li>
+<li><p>Was this good or am I wrong? Change my mind: making
+<code>Maybe</code> FT is more of a footgun than a feature</p></li>
+<li><p>How would this affect continuing this project?</p></li>
+</ul>
+
+<h2>Is This A Thing?</h2>
+
+<ul>
+<li><p>"I did a thing"</p></li>
+<li><p>Is there anything here worth continuing / salvaging?</p>
+
+<ul>
+<li><p>Probably some kind of laws, I think. Proofs?</p></li>
+<li><p>Maybe continued GHC improvements for combinators, but
+this seems to be incredibly hard?</p></li>
+</ul></li>
+</ul>
+
+<h2>Freaking Eloi and Morlocs</h2>
+
+<ul>
+<li><p>c.f. <em>The Time Machine</em>. I am not an H.G. Wells fan. Maybe
+Architects and Builders?</p></li>
+<li><p>"Avoid success at any cost" has been incredibly successful</p></li>
+<li><p>ChatGPT programming vs brilliant elegant programming?</p></li>
+</ul>
+</body></html>
