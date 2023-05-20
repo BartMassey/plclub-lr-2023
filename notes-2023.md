@@ -175,3 +175,13 @@ PL Club 2023-05-19
 * "Avoid success at any cost" has been incredibly successful
 
 * ChatGPT programming vs brilliant elegant programming?
+
+## Acks and Source
+
+* Thanks to the original ackees, to Katherine Phillips for
+  inviting the talk, and to Katie Casamento for the helpful
+  suggestion about morphisms
+  
+* https://github.com/BartMassey/plclub-lr-2023
+
+* https://github.com/BartMassey/list-combinators
