@@ -98,7 +98,7 @@ useful.</p></li>
 <li><p>Started to expose one possible set of dependencies between
 <code>Data.List</code> functions.</p></li>
 <li><p>Added about 25 functions for completeness, orthogonality,
-general goodness.</p></li>
+general goodness: total about 135 functions.</p></li>
 </ul>
 
 <h2>Laws</h2>
@@ -107,7 +107,9 @@ general goodness.</p></li>
 constructed "laws" for almost all functions in <code>Data.List</code>.</p>
 
 <ul>
-<li><p>Laws were constructed solely from the documentation.</p></li>
+<li><p>Also specified complexity and strictness.</p></li>
+<li><p>Laws (and code) were constructed solely from the
+documentation.</p></li>
 <li><p>Did some very minimal verification that some laws held for
 both versions.</p></li>
 <li><p>Found one fairly glaring bug in the documentation, in
@@ -161,13 +163,80 @@ things. My Haskell skills are not so leet...</p></li>
 primitive functions.</p></li>
 </ul>
 
+<h2>Some Lazy Pattern Matches</h2>
+
+<p>In several places, pattern matches had to be made "lazy" (~
+operator) to get strictness right.</p>
+
+<ul>
+<li><p>Typical case was an "irrefutable" pattern match: wanted to
+be deferred for laziness because there was only one way it
+could match. e.g. in <code>transpose</code></p>
+
+<pre><code>g ~(y : ys) (h, t) = (y : h, ys : t)
+</code></pre></li>
+<li><p>Maybe this should be implicit?  I had nice discussions
+with Tim Sheard and Mark Jones about this. They both think
+that this is fine.</p></li>
+<li><p>Mark actually managed to convince me for a while.</p>
+
+<pre><code> f ~[_] = 3
+
+
+ &gt;&gt;&gt; f []
+ 3
+</code></pre>
+
+<ul>
+<li>Now I am not convinced again: this seems OK to me.</li>
+</ul></li>
+</ul>
+
+<h2>One Strictness Bug</h2>
+
+<p>There is one known outright strictness bug. There are probably
+many others.</p>
+
+<ul>
+<li><p>Bug manifests in <code>take</code>.</p>
+
+<pre><code>&gt;&gt;&gt; take 1 $ insertBy compare 2 [1, undefined]
+[1*** Exception: Prelude.undefined
+</code></pre></li>
+<li><p>Seems like something deep, and I can't find it.</p></li>
+<li><p>Strange behavior in that take "shouldn't be able to do that".</p></li>
+</ul>
+
+<h2>Performance Sucks</h2>
+
+<p>The performance of all this? The same 30x slower that was
+reported last week. And probably for the same reasons.</p>
+
+<ul>
+<li>Did some Criterion <a href="benchmarks.html">benchmarks</a></li>
+</ul>
+
+<h2>Work In Progress</h2>
+
+<ul>
+<li><p>Fix known bugs.</p></li>
+<li><p>Find or write <code>Data.List</code> QuickCheck or similar tests.</p></li>
+<li><p>Use a strictness tester to find more strictness bugs.</p></li>
+<li><p>Nail down the rest of the Laws.</p></li>
+<li><p>Experiment with actual proofs in this structure.</p></li>
+<li><p>Make performance acceptable if possible.</p></li>
+<li><p>Figure out how to fuse <code>lr</code> calls.</p></li>
+</ul>
+
 <h2>Acknowledgments</h2>
 
 <ul>
 <li><p>Jamey Sharp and Julian Kongslie, who helped me work
 through this the first time.</p></li>
-<li><p>Mark Jones, who had great comments on everything.</p></li>
+<li><p>Mark Jones and Tim Sheard, who had great comments on
+everything.</p></li>
 <li><p>The PDXFunc folks, who listed to two versions of this talk
 and provided valuable feedback.</p></li>
+<li><p>Graphviz and Criterion</p></li>
 </ul>
 </body></html>

@@ -68,7 +68,7 @@
 <span class='hs-comment'>-- specified is maximally productive.</span>
 <span class='hs-comment'>-----------------------------------------------------------------------------</span>
 
-<span class='hs-keyword'>module</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>List</span><span class='hs-varop'>.</span><span class='hs-conid'>Combinator</span> <span class='hs-layout'>(</span>
+<span class='hs-keyword'>module</span> <span class='hs-conid'>Data.List.Combinator</span> <span class='hs-layout'>(</span>
   <span class='hs-keyword'>module</span> <span class='hs-conid'>Prelude</span><span class='hs-layout'>,</span>
   <span class='hs-comment'>-- * Linear Recursion</span>
   <span class='hs-varid'>lr</span><span class='hs-layout'>,</span>
@@ -293,7 +293,7 @@
   <span class='hs-varid'>words</span><span class='hs-layout'>,</span>
   <span class='hs-varid'>unlines</span><span class='hs-layout'>,</span>
   <span class='hs-varid'>unwords</span><span class='hs-layout'>)</span>
-<span class='hs-keyword'>import</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Char</span> <span class='hs-layout'>(</span><span class='hs-varid'>isSpace</span><span class='hs-layout'>)</span>
+<span class='hs-keyword'>import</span> <span class='hs-conid'>Data.Char</span> <span class='hs-layout'>(</span><span class='hs-varid'>isSpace</span><span class='hs-layout'>)</span>
 
 
 <span class='hs-comment'>-- XXX Need to write laws for this.</span>
@@ -1193,7 +1193,7 @@
 
 <span class='hs-comment'>-- XXX Strictness bug:</span>
 <span class='hs-comment'>-- </span>
-<span class='hs-comment'>-- &gt;&gt;&gt; take 1 $ insertBy' compare 2 [1, undefined]</span>
+<span class='hs-comment'>-- &gt;&gt;&gt; take 1 $ insertBy compare 2 [1, undefined]</span>
 <span class='hs-comment'>-- [1*** Exception: Prelude.undefined</span>
 <span class='hs-comment'>-- </span>
 <span class='hs-comment'>-- After messing with it for an hour, I have no clue why.</span>
@@ -2320,6 +2320,13 @@
 <span class='hs-definition'>insert</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ord</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span>
 <span class='hs-definition'>insert</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>insertBy</span> <span class='hs-varid'>compare</span>
 
+<span class='hs-comment'>-- XXX Strictness bug:</span>
+<span class='hs-comment'>-- </span>
+<span class='hs-comment'>-- &gt;&gt;&gt; take 1 $ insertBy compare 2 [1, undefined]</span>
+<span class='hs-comment'>-- [1*** Exception: Prelude.undefined</span>
+<span class='hs-comment'>-- </span>
+<span class='hs-comment'>-- After messing with it for an hour, I have no clue why.</span>
+
 <span class='hs-comment'>-- | Given a list of 'Ord' values, insert an element @x1@ at the first</span>
 <span class='hs-comment'>-- position such that the next element @x2@ is greater than or equal to @x1@,</span>
 <span class='hs-comment'>-- using the supplied comparison function. Some examples:</span>
@@ -2360,6 +2367,13 @@
 <span class='hs-comment'>-- &gt; forall x0 xs . insert' x0 xs == insertBy' compare x0 xs</span>
 <span class='hs-definition'>insert'</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ord</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span>
 <span class='hs-definition'>insert'</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>insertBy'</span> <span class='hs-varid'>compare</span>
+
+<span class='hs-comment'>-- XXX Strictness bug:</span>
+<span class='hs-comment'>-- </span>
+<span class='hs-comment'>-- &gt;&gt;&gt; take 1 $ insertBy' compare 2 [1, undefined]</span>
+<span class='hs-comment'>-- [1*** Exception: Prelude.undefined</span>
+<span class='hs-comment'>-- </span>
+<span class='hs-comment'>-- After messing with it for an hour, I have no clue why.</span>
 
 <span class='hs-comment'>-- | Given a list of 'Ord' values, insert an element @x0@</span>
 <span class='hs-comment'>-- into the list at the last position where it is still less</span>
